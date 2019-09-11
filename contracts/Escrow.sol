@@ -1,9 +1,9 @@
-pragma solidity ^0.4.13;
+pragma solidity ^0.5.8;
 
 contract Escrow {
   uint public productId;
-  address public buyer;
-  address public seller;
+  address payable public buyer;
+  address payable public seller;
   address public arbiter;
   uint public amount;
   bool public fundsDisbursed;
@@ -12,7 +12,7 @@ contract Escrow {
   mapping (address => bool) refundAmount;
   uint public refundCount;
 
-  function Escrow(uint _productId, address _buyer, address _seller, address _arbiter) payable public {
+  constructor(uint _productId, address payable _buyer, address payable _seller, address _arbiter) payable public {
     productId = _productId;
     buyer = _buyer;
     seller = _seller;

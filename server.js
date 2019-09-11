@@ -30,7 +30,7 @@ async function main(){
   app.set("view engine","html");
   app.engine("html",require("ejs").__express);
 
-  app.use('/',ui())
+  // app.use('/',ui())
   app.use('/api',api(config,db))
 
   app.listen(9000, function() {

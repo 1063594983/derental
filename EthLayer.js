@@ -1,7 +1,7 @@
-import { default as Web3} from 'web3';
-import { default as contract } from 'truffle-contract'
-import marketplaceArtifacts from '../../build/contracts/Marketplace.json'
-import ethUtil from 'ethereumjs-util'
+const contract = require('truffle-contract')
+const Web3 = require('web3');
+const marketplaceArtifacts = require('./Marketplace.json')
+// import ethUtil from 'ethereumjs-util'
 // 和以太坊交互
 class EthLayer {
   constructor(){
@@ -9,7 +9,7 @@ class EthLayer {
     // let marketplaceContract = contract(marketplaceArtifacts)
     // marketplaceContract.setProvider(provider)
     // this.web3 = Web3
-    this.account = "0xC0F20Edba75CB6208b4773DCFc9dC05b767E93ce"
+    this.account = "0x202C3cc09adA398CDaf2a85341f0132748cF3EaC"
     this.marketplaceContract = contract(marketplaceArtifacts)
     this.marketplaceContract.setProvider(provider)
   }
@@ -34,6 +34,7 @@ class EthLayer {
   async getUserCredit(){
     let inst = await this.marketplaceContract.deployed()
     let ret = await inst.getCredit(this.account)
+    console.log(ret)
     return ret
   }
 
@@ -70,3 +71,25 @@ class EthLayer {
 }
 
 export default EthLayer
+
+// async function getExchangeRate(from,to){
+//     let url = `https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`
+//     let rsp = await fetch(url)
+//     rsp = await rsp.json()
+//     return +rsp[to]
+//   }
+
+//   console.log(getExchangeRate("CNY", "ETH"))
+
+// let eth = new EthLayer();
+// var house = {
+//     depositWei: "1542600000000000000",
+//     city: '上海',
+//     title: '华师大',
+//     descHash: '',
+//     price: '300',
+//     imageHash: ''
+// }
+
+// eth.createListing(house)
+eth.getUserCredit()

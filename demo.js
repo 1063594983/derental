@@ -1,21 +1,21 @@
-import { default as Web3} from 'web3';
-import { default as contract } from 'truffle-contract'
-import marketplaceArtifacts from '../../build/contracts/Marketplace.json'
-import ethUtil from 'ethereumjs-util'
+const contract = require('truffle-contract')
+const Web3 = require('web3');
+const marketplaceArtifacts = require('./Marketplace.json')
+// import ethUtil from 'ethereumjs-util'
 // 和以太坊交互
 class EthLayer {
   constructor(){
-    let provider = new Web3.providers.HttpProvider("http://localhost:8545");
+    let provider = new Web3.providers.HttpProvider("http://localhost:8545/");
     // let marketplaceContract = contract(marketplaceArtifacts)
     // marketplaceContract.setProvider(provider)
     // this.web3 = Web3
-    this.account = "0xC0F20Edba75CB6208b4773DCFc9dC05b767E93ce"
+    this.account = "0x202C3cc09adA398CDaf2a85341f0132748cF3EaC"
     this.marketplaceContract = contract(marketplaceArtifacts)
     this.marketplaceContract.setProvider(provider)
   }
   async createListing(house){
-    let inst = await this.marketplaceContract.deployed()
-    let ret = await inst.createListing(house.depositWei,house.city,house.title,house.descHash,house.price,house.imageHash,{from:web3.eth.defaultAccount,value:house.depositWei})
+    let inst = await this.marketplaceContract.at("0xA5f6C2c2958822f2B1F6CCBb75c56C064b930364")
+    let ret = await inst.createListing(house.depositWei,house.city,house.title,house.descHash,house.price,house.imageHash,{from:"0xBfE64667faC0eA5B32AE9268F5a12F430C60Bf08",value:house.depositWei})
     console.log('listing created => ', ret)
   }
 
@@ -32,8 +32,9 @@ class EthLayer {
   }
 
   async getUserCredit(){
-    let inst = await this.marketplaceContract.deployed()
+    let inst = await this.marketplaceContract.at("0xA5f6C2c2958822f2B1F6CCBb75c56C064b930364")
     let ret = await inst.getCredit(this.account)
+    console.log(ret)
     return ret
   }
 
@@ -69,4 +70,27 @@ class EthLayer {
 
 }
 
-export default EthLayer
+// async function getExchangeRate(from,to){
+//     let url = `https://min-api.cryptocompare.com/data/price?fsym=${from}&tsyms=${to}`
+//     let rsp = await fetch(url)
+//     rsp = await rsp.json()
+//     return +rsp[to]
+//   }
+
+//   console.log(getExchangeRate("CNY", "ETH"))
+
+let eth = new EthLayer();
+var house = {
+    city: "北京",
+deposit: "200",
+depositWei: "152160000000000000",
+desc: "随时看房",
+descHash: "QmcAHiUWxs3WmjNLMNLyCyvihtsr82s7Di4g7bUKt7xxQF",
+image: "",
+imageHash: "",
+price: "300",
+title: "大三居，主卧朝阳"
+}
+
+eth.createListing(house)
+// eth.getUserCredit()

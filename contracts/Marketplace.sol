@@ -1,10 +1,10 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.8;
 //租房平台合约
 contract Marketplace{
 
 
     struct Listing{//表示上架房屋的结构体
-        address seller;
+        address payable seller;
         uint deposit;  //押金，保证金
         uint8 status;      //0表示默认空闲，1表示已预订，9表示保证金已返回，即房屋已经失效
         string city;
@@ -15,7 +15,7 @@ contract Marketplace{
     }
 
     struct Offer{//表示租赁房屋的结构体
-        address buyer;
+        address payable buyer;
         uint value;
         uint refund;  //返回的金额
         uint finalizes;      // 表示自动支付的时间
@@ -84,12 +84,12 @@ contract Marketplace{
     }
 
     // @dev 定义房屋出售的函数
-    function createListing( uint deposit,string city,string title,string descHash,uint price, string imageHash)  public payable {
+    function createListing( uint deposit, string memory city,string memory title,string memory descHash,uint price, string memory imageHash)  public payable {
 
         //require(deposit > 0,"Seller must deposit to create a listing");
         //require(deposit == msg.value, "Seller deposit doesn't declared value");
 
-        address seller = msg.sender;
+        address payable seller = msg.sender;
         uint8 status = 1;
 
         Listing memory listing = Listing({
@@ -142,7 +142,7 @@ contract Marketplace{
         //require(msg.value >= nights * listing.price,"Paid ETH cann't lower than price*nights");
         require(msg.value >0, "No ETH paid for the offer");
 
-        address buyer = msg.sender;
+        address payable buyer = msg.sender;
 
         uint checkOut = checkIn + nights * 24 * 60 * 60;
         //uint refund = msg.value - nights * listing.price;
@@ -313,7 +313,7 @@ contract Marketplace{
     }
 
     // @dev 房东 订单房屋出租总列表
-    function getListing(uint listingId) public view returns(address,uint,uint8,string,string,string,uint,string){
+    function getListing(uint listingId) public view returns(address,uint,uint8,string memory,string memory,string memory,uint,string memory){
         Listing storage listing = listings[listingId];
         return (listing.seller,listing.deposit,listing.status,listing.city,listing.title,listing.descHash,listing.price,listing.imageHash);
     }
@@ -341,10 +341,10 @@ contract Marketplace{
     }
 
     bytes32[] hashes;
-    function setHashes(bytes32[] _hashes) public {
+    function setHashes(bytes32[] memory _hashes) public {
       hashes = _hashes;
     }
-    function getHashes() public view returns(bytes32[]) {
+    function getHashes() public view returns(bytes32[] memory) {
       return hashes;
     }
 
