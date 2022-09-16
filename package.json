@@ -36,7 +36,7 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.3.1",
     "dotenv": "^8.1.0",
     "ethereumjs-util": "^5.1.5",
     "ganache-cli": "^6.7.0",
